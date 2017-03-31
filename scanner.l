@@ -64,7 +64,7 @@ ISUFIX	[uUlL]|(ll)|(LL)
 #{BLANK}*pragma{BLANK}+token{BLANK}+on{BLANK}*("/*".*)?				{tokenOn = 1;PutToBuffer(yytext);BEGIN COMMENT;}
 #{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("//".*)?				{tokenOn = 0;PutToBuffer(yytext);}
 #{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("/*".*)?				{tokenOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
-#[.]*			{printf("No Matched pragma rule\n");Error();}
+#.*			{printf("No Matched pragma rule\n");Error();}
 
 
 
