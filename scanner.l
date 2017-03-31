@@ -165,15 +165,15 @@ ISUFIX	[uUlL(LL)(ll)]
 
 
 
-\'{CH}+\'                {PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
-\"{CH}*\"		{
+\'{CH}+\'           {PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
+\"{CH}*\"			{
 						char* temp = (char*)malloc(sizeof(char)*(strlen(yytext)-2); 
 						int i=0;
 						for(i=0;i<strlen(yytext)-2;i++)
 							temp[i] = yytext[i+1];
 						PutToBuffer(temp);
 						PrintToken(STRING,temp);
-					}  // 必須要測試空字串啊啊啊!!!
+					}  
 
 
 "+"		{PutToBuffer(yytext);PrintToken(OP,yytext);}
@@ -235,7 +235,7 @@ void ClearBuffer(){
 
 void PrintToken(type t,char* text){
 	if(tokenOn==1){
-		Switch(t){
+		switch(t){
 			case KEY:
 				printf("#key:%s\n",text);
 				break;
