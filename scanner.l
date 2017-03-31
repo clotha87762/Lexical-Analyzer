@@ -142,10 +142,13 @@ ISUFIX	[uUlL(LL)(ll)]
 
 
 {digit}+[{alpha}_]+		{Error();}
-[{alpha}_]{VID}*		{PutToBuffer(yytext);PrintToken(ID,yytext);}
 
 "{"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
 "}"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
+
+[{alpha}_]{VID}*		{PutToBuffer(yytext);PrintToken(ID,yytext);}
+
+
 
 0{digit}+{ISUFIX}?				{Error();}
 [1-9]{digit}*{ISUFIX}?		{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
