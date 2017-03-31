@@ -34,6 +34,7 @@ BLANK		(([\ \t])|("/*".*"*/"))
 CMT 	"/*".*"*/"
 LCMT	"//"[^\n]*\n
 CH 		(\\\')|(\\\")|(\\\?)|(\\\\)|(\\t)|(\\n)|[^\'\\\n]
+STRCH	(\\\')|(\\\")|(\\\?)|(\\\\)|(\\t)|(\\n)|[^\"\\\n]
 
 FSUFIX	[fFlL]
 ISUFIX	[uUlL]|(ll)|(LL)
@@ -171,7 +172,7 @@ ISUFIX	[uUlL]|(ll)|(LL)
 
 
 \'{CH}+\'           {PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
-\"{CH}*\"			{
+\"{STRCH}*\"			{
 						PutToBuffer(yytext);
 						char* temp = (char*)malloc(sizeof(char)*(strlen(yytext)-2)); 
 						int i=0;
