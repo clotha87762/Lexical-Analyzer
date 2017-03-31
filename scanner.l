@@ -287,6 +287,7 @@ void PrintSrc(){
 void PrintEOFSrc(){
 	if(srcOn==1&&strlen(lineBuffer)>0){
 		printf("%d:%s",lineCount,lineBuffer);
+		printf("\n");
 	}
 }
 
