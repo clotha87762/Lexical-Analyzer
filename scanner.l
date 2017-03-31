@@ -292,6 +292,6 @@ void PrintEOFSrc(){
 }
 
 void Error(){
-	fprintf(stderr,"error at line %d: %s\n",lineCount,yytext);exit(1);
+	fprintf(stderr,"Error at line %d: %s\n",lineCount,yytext);exit(1);
 }
 
