@@ -39,7 +39,7 @@ LCMT	"//"[^\n]*\n
 CH 		(\\\')|(\\\")|(\\\?)|(\\\\)|(\\t)|(\\n)|[^\'\\\n]
 
 FSUFIX	[fFlL]
-ISUFIX	[uUlL(LL)(ll)]
+ISUFIX	[uUlL]|(ll)|(LL)
 
 %x	LINECOMMENT
 %x	COMMENT
@@ -159,12 +159,12 @@ ISUFIX	[uUlL(LL)(ll)]
 0{ISUFIX}?					{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
 
 
-{digit}+\.{digit}*[eE][\+\-]?{digit}+{FSUFIX}?	{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-{digit}+\.{digit}*[eE][\+\-]?{digit}+{FSUFIX}?(\.|_|{ad})+	{printf("SCI Error\n");Error();}
-\.{digit}+[eE][\+\-]?{digit}+{FSUFIX}?		{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-\.{digit}+[eE][\+\-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
-{digit}+[eE][\+\-]?{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-{digit}+[eE][\+\-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
+{digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?	{PutToBuffer(yytext);PrintToken(SCI,yytext);}
+{digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+	{printf("SCI Error\n");Error();}
+\.{digit}+[eE][+-]?{digit}+{FSUFIX}?		{PutToBuffer(yytext);PrintToken(SCI,yytext);}
+\.{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
+{digit}+[eE][+-]?{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(SCI,yytext);}
+{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
 
 {digit}+\.{digit}*{FSUFIX}?	{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
 {digit}+\.{digit}*{FSUFIX}?(\.|_|{ad})+		{printf("double Error\n");Error();}
