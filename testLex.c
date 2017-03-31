@@ -1,7 +1,8 @@
 #include <stdio.h>
 
 int main () {
-    string s = "";
+    char cc = ' ';
+    printf("%c123\n",cc);
     FILE* F = fopen("test.c","r");
     char c;
     do{

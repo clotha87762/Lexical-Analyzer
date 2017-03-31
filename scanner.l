@@ -223,10 +223,11 @@ L?\"{STRCH}*\"			{
 
 \n		{PutToBuffer(yytext); PrintSrc();ClearBuffer();lineCount++;}
 		
+[\ ]	{printf("%");}
+(\ )	{printf("#");}
+(" ")	{printf("@");}
 
-
-
-(" "|\t)	{PutToBuffer(yytext);}
+(\t)	{PutToBuffer(yytext);}
 \0		{PrintEOFSrc();}
 .		{printf("non-exsistent token\n");Error();}
 
