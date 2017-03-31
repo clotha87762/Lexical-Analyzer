@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 int main () {
+    string s = "";
     FILE* F = fopen("test.c","r");
     char c;
     do{
