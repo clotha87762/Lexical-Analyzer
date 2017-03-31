@@ -175,11 +175,12 @@ ISUFIX	[uUlL(LL)(ll)]
 
 \'{CH}+\'           {PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
 \"{CH}*\"			{
+						PutToBuffer(yytext);
 						char* temp = (char*)malloc(sizeof(char)*(strlen(yytext)-2)); 
 						int i=0;
 						for(i=0;i<strlen(yytext)-2;i++)
 							temp[i] = yytext[i+1];
-						PutToBuffer(temp);
+						
 						PrintToken(STRING,temp);
 					}  
 
