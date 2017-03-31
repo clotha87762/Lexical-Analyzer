@@ -33,8 +33,8 @@ CH 		(\\\')|(\\\")|(\\\?)|(\\\\)|(\\t)|(\\n)|[^\'\\\n]
 FSUFIX	[fFlL]
 ISUFIX	[uUlL(LL)(ll)]
 
-%x	LINECOMMENT;
-%x	COMMENT;
+%x	LINECOMMENT
+%x	COMMENT
 
 
 
