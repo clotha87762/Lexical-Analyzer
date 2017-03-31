@@ -226,7 +226,7 @@ L?\"{STRCH}*\"			{
 
 
 
-[\ \t]	{PutToBuffer(yytext);}
+(" "|\t)	{PutToBuffer(yytext);}
 \0		{PrintEOFSrc();}
 .		{printf("non-exsistent token\n");Error();}
 
