@@ -182,7 +182,7 @@ L?\"{STRCH}*\"			{
 								temp[i] = yytext[i+2];
 						}
 						else{
-							char* temp = (char*)malloc(sizeof(char)*(strlen(yytext)-2)); 
+							temp = (char*)malloc(sizeof(char)*(strlen(yytext)-2)); 
 							int i=0;
 							for(i=0;i<strlen(yytext)-2;i++)
 								temp[i] = yytext[i+1];
