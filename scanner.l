@@ -23,7 +23,7 @@ digit [0-9]
 ad	  [a-zA-Z0-9]
 Operator	[\+\-\*\/\%(\+\+)(\-\-)\<(\<\=)\>(\>\=)(\=\=)(\!\=)\=(\&\&)(\|\|)\!\&]
 Punctuation [\:\;\,\.\[\]\(\)\{\}]
-BLANK		[\ \t{CMT}]
+BLANK		[\ \t("/*".*"*/")]
 SEP		[\+\-\*\/\%(\+\+)(\-\-)\<(\<\=)\>(\>\=)(\=\=)(\!\=)\=(\&\&)(\|\|)\!\&\ \t\:\;\,\[\]\(\)\{\}\n]
 
 CMT 	"/*".*"*/"
@@ -58,6 +58,9 @@ ISUFIX	[uUlL(LL)(ll)]
 #{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("/*".*)?				{tokenOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
 #[.]*			{printf("No Matched pragma rule\n");Error();}
 
+
+"{"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
+"}"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
 
 "void"		{PutToBuffer(yytext);PrintToken(KEY,yytext);}
 "int"		{PutToBuffer(yytext);PrintToken(KEY,yytext);}
@@ -149,11 +152,11 @@ ISUFIX	[uUlL(LL)(ll)]
 
 
 {digit}+.{digit}*[eE][\+\-]?{digit}+{FSUFIX}?	{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-{digit}+.{digit}*[eE][\+\-]?{digit}+[\.{ad}_]+{FSUFIX}?	{printf("SCI Error\n");Error();}
+{digit}+.{digit}*[eE][\+\-]?{digit}+{FSUFIX}?[\.{ad}_]+?	{printf("SCI Error\n");Error();}
 \.{digit}+[eE][\+\-]?{digit}+{FSUFIX}?		{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-\.{digit}+[eE][\+\-]?{digit}+[\.{ad}_]+{FSUFIX}?		{printf("SCI Error\n");Error();}
+\.{digit}+[eE][\+\-]?{digit}+{FSUFIX}?[\.{ad}_]+		{printf("SCI Error\n");Error();}
 {digit}+[eE][\+\-]?{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-\.{digit}+[eE][\+\-]?{digit}+[\.{ad}_]+{FSUFIX}?		{printf("SCI Error\n");Error();}
+\.{digit}+[eE][\+\-]?{digit}+{FSUFIX}?[\.{ad}_]+		{printf("SCI Error\n");Error();}
 
 {digit}+.{digit}*{FSUFIX}?	{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
 {digit}+.{digit}*[\.{ad}_]+{FSUFIX}?		{printf("double Error\n");Error();}
@@ -210,8 +213,9 @@ ISUFIX	[uUlL(LL)(ll)]
 
 
 [\ \t]	{PutToBuffer(yytext);}
-.		{printf("non-exsistent token\n");Error();}
 \0		{PrintEOFSrc();}
+.		{printf("non-exsistent token\n");Error();}
+
 %%
 
 int main(int argc , char* argv[]){
