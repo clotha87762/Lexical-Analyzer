@@ -223,7 +223,6 @@ L?\"{STRCH}*\"			{
 
 \n		{PutToBuffer(yytext); PrintSrc();ClearBuffer();lineCount++;}
 		
-
 (" ")|(\t)	{PutToBuffer(yytext);}
 \0		{PrintEOFSrc();}
 
