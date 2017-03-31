@@ -1,4 +1,11 @@
 //This test case is only for homework explanation
+
+int main(){
+    int x = 10;
+    printf("%d\n",x);
+    return 0;
+}
+/*
 int main () {
         double a = 6.0;
         int i;
