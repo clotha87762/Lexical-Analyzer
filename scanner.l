@@ -174,8 +174,9 @@ ISUFIX	[uUlL]|(ll)|(LL)
 \'{CH}+\'           {PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
 L?\"{STRCH}*\"			{
 						PutToBuffer(yytext);
+						char* temp;
 						if(yytext[0]=='L'){
-							char* temp = (char*)malloc(sizeof(char)*(strlen(yytext)-3)); 
+							temp = (char*)malloc(sizeof(char)*(strlen(yytext)-3)); 
 							int i=0;
 							for(i=0;i<strlen(yytext)-3;i++)
 								temp[i] = yytext[i+2];
