@@ -281,3 +281,7 @@ void PrintEOFSrc(){
 void Error(){
 	fprintf(stderr,"error at line %d: %s\n",lineCount,yytext);exit(1);
 }
+
+int yywrap(){
+	return 1;
+}
