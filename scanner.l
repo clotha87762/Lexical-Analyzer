@@ -167,7 +167,7 @@ ISUFIX	[uUlL(LL)(ll)]
 
 \'{CH}+\'           {PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
 \"{CH}*\"			{
-						char* temp = (char*)malloc(sizeof(char)*(strlen(yytext)-2); 
+						char* temp = (char*)malloc(sizeof(char)*(strlen(yytext)-2)); 
 						int i=0;
 						for(i=0;i<strlen(yytext)-2;i++)
 							temp[i] = yytext[i+1];
@@ -285,6 +285,3 @@ void Error(){
 	fprintf(stderr,"error at line %d: %s\n",lineCount,yytext);exit(1);
 }
 
-int yywrap(){
-	return 1;
-}
