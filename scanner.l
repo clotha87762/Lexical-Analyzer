@@ -142,6 +142,8 @@ ISUFIX	[uUlL(LL)(ll)]
 
 
 {digit}+[{alpha}_]+		{Error();}
+"{"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
+"}"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
 [{alpha}_]{VID}*		{PutToBuffer(yytext);PrintToken(ID,yytext);}
 
 
@@ -149,8 +151,7 @@ ISUFIX	[uUlL(LL)(ll)]
 [1-9]{digit}*{ISUFIX}?		{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
 0{ISUFIX}?					{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
 
-"{"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
-"}"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
+
 
 {digit}+.{digit}*[eE][\+\-]?{digit}+{FSUFIX}?	{PutToBuffer(yytext);PrintToken(SCI,yytext);}
 {digit}+.{digit}*[eE][\+\-]?{digit}+{FSUFIX}?[\.{ad}_]+?	{printf("SCI Error\n");Error();}
