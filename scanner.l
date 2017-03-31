@@ -12,7 +12,15 @@ typedef enum {
 	KEY,ID,OP,PUNC,INTEGER,DOUBLE,CHARACTER,SCI,STRING
 }type;
 
-// No \. In Sep
+void PrintEOFSrc();
+void PutToBuffer(char* token);
+void ClearBuffer();
+void PrintSrc();
+void PrintToken(type t,char* text);
+void PrintEOFSrc();
+void Error();
+
+
 %}
 
 VID   [a-zA-Z0-9_]
