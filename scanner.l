@@ -59,8 +59,7 @@ ISUFIX	[uUlL(LL)(ll)]
 #[.]*			{printf("No Matched pragma rule\n");Error();}
 
 
-"{"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
-"}"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
+
 
 "void"		{PutToBuffer(yytext);PrintToken(KEY,yytext);}
 "int"		{PutToBuffer(yytext);PrintToken(KEY,yytext);}
@@ -163,7 +162,8 @@ ISUFIX	[uUlL(LL)(ll)]
 \.{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
 \.{digit}+[\.{ad}_]+{FSUFIX}?		{printf("double Error\n");Error();}
 
-
+"{"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
+"}"		{PutToBuffer(yytext);PrintToken(PUNC,yytext);}
 
 
 \'{CH}+\'                {PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
