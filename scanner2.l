@@ -152,31 +152,33 @@ ISUFIX	[uUlL]|(ll)|(LL)
 
 
 
-0{ISUFIX}?{digit}+				{Error();}
-[1-9]{digit}*{ISUFIX}?		{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
-0{ISUFIX}?					{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
+0{ISUFIX}?/{SEP}+				{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
+0{ISUFIX}?					{Error();}
+[1-9]{digit}*{ISUFIX}?/{SEP}+		{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
+[1-9]{digit}*{ISUFIX}?		{Error();}
 
 
-{digit}+({alpha}|_)+		{Error();}
-({alpha}|_){VID}*		{PutToBuffer(yytext);PrintToken(ID,yytext);}
+{digit}+/({alpha}|_)+		{Error();}
+({alpha}|_){VID}*/({SEP}+|".")		{PutToBuffer(yytext);PrintToken(ID,yytext);}
 
 
-{digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?	{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-{digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+	{printf("SCI Error\n");Error();}
-\.{digit}+[eE][+-]?{digit}+{FSUFIX}?		{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-\.{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
-{digit}+[eE][+-]?{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
+{digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?/{SEP}+	{PutToBuffer(yytext);PrintToken(SCI,yytext);}
+{digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?	{printf("SCI Error\n");Error();}
+\.{digit}+[eE][+-]?{digit}+{FSUFIX}?/{SEP}+		{PutToBuffer(yytext);PrintToken(SCI,yytext);}
+\.{digit}+[eE][+-]?{digit}+{FSUFIX}?		{printf("SCI Error\n");Error();}
+{digit}+[eE][+-]?{digit}+{FSUFIX}?/{SEP}+			{PutToBuffer(yytext);PrintToken(SCI,yytext);}
+{digit}+[eE][+-]?{digit}+{FSUFIX}?		{printf("SCI Error\n");Error();}
 
-{digit}+\.{digit}*{FSUFIX}?		{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
-{digit}+\.{digit}*{FSUFIX}?(\.|_|{ad})+		{printf("double Error\n");Error();}
-\.{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
-\.{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("double Error\n");Error();}
+{digit}+\.{digit}*{FSUFIX}?/{SEP}+		{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
+{digit}+\.{digit}*{FSUFIX}?		{printf("double Error\n");Error();}
+\.{digit}+{FSUFIX}?/{SEP}+			{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
+\.{digit}+{FSUFIX}?				{printf("double Error\n");Error();}
 
 
 
-\'{CH}+\'           {	PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
-L?\"{STRCH}*\"		{
+\'{CH}+\'/{SEP}+           {	PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
+\'{CH}+\'					{Error();}
+L?\"{STRCH}*\"/{SEP}+		{
 						PutToBuffer(yytext);
 						char* temp;
 						if(yytext[0]=='L'){
@@ -193,6 +195,8 @@ L?\"{STRCH}*\"		{
 						}
 						PrintToken(STRING,temp);
 					}  
+
+L?\"{STRCH}*\"		{Error();}
 
 
 "+"		{PutToBuffer(yytext);PrintToken(OP,yytext);}

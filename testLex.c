@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+int x; #include <string.h>
 int main () {
     char cc = ' ';
     printf("%c123\n",cc);
