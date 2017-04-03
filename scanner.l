@@ -175,7 +175,7 @@ ISUFIX	[uUlL]|(ll)|(LL)
 
 
 
-\'{CH}+\'           {	PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
+\'{CH}\'           {	PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
 L?\"{STRCH}*\"		{
 						PutToBuffer(yytext);
 						char* temp;
@@ -231,7 +231,7 @@ L?\"{STRCH}*\"		{
 (" ")|(\t)	{PutToBuffer(yytext);}
 \0		{PrintEOFSrc();}
 
-.		{printf("non-exsistent token\n");Error();}
+.		{Error();}
 
 %%
 

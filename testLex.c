@@ -1,8 +1,14 @@
 #include <stdio.h>
-int x; #include <string.h>
+
 int main () {
+    double x = 012.12;
+
     char cc = ' ';
-    printf("%c123\n",cc);
+    char sss[100] = "
+    ";
+    printf("aaa""bbb""ccc""\n");
+   // sss = "asd";
+
     FILE* F = fopen("test.c","r");
     char c;
     do{
