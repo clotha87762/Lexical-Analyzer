@@ -1,13 +1,22 @@
 #pragma /*aa*/ source /*b//bb*/ off  //   /*
 
+2*2.18/f123qwe__+ugor-321>=123E+33333-186
 ___123
 __ 
 __abc
-1__
-//////////**/
+
+//#pragma source on////////**/
 /*
 
 */
+#pragma source on
+#pragma source on
+#pragma source off
+#pragma source on
+#pragma token on
+#pragma token off
+#pragma token on
+#pragma token on
 @
 qwe
 dsas

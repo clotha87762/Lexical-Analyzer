@@ -1,27 +1,44 @@
-1://This test case is only for homework explanation
+1:/*
+2: * Testcase_1_comment1
+3: *
+4: *
+5: */
+6:/*
+7:   Testcase_1_comment2
+8:
+9: */
+10:
+11:// Testcase_1_comment3
+12:
 #key:int
 #id:main
 #punc:(
 #punc:)
 #punc:{
-2:int main () {
-#key:double
+#key:char
 #id:a
 #op:=
-#double:6.0
+#char:'a'
 #punc:;
-3:        double a = 6.0;
-#key:int
-#id:i
-#punc:;
-4:        int i;
-#key:int
+18:#pragma source on
+#key:double
 #id:b
+#op:=
+#double:0.01
+#punc:;
+19:    double b = 0.01;
+20:
+21:#pragma token off
+22:    int i;
+23:
+24:#pragma token on
+#key:int
+#id:c
 #punc:[
 #integer:2
 #punc:]
 #punc:;
-5:        int b[2];
+25:    int c[2];
 #key:for
 #punc:(
 #id:i
@@ -36,31 +53,32 @@
 #op:++
 #punc:)
 #punc:{
-6:        for (i = 0; i < 2; i++) {
-#id:b
+26:    for (i = 0; i < 2; i++) {
+#id:c
 #punc:[
 #id:i
 #punc:]
 #op:=
 #id:i
 #punc:;
-7:                b[i] = i;
+27:            c[i] = i;
 #punc:}
-8:        }
+28:        }
+29:
 #key:printf
 #punc:(
-#string:b[1]=%d\n
+#string:c[1]=%d\n
 #punc:,
-#id:b
+#id:c
 #punc:[
 #integer:1
 #punc:]
 #punc:)
 #punc:;
-9:        printf("b[1]=%d\n", b[1]);
+30:    printf("c[1]=%d\n", c[1]);
 #key:if
 #punc:(
-#id:b
+#id:c
 #punc:[
 #integer:0
 #punc:]
@@ -68,20 +86,20 @@
 #integer:1
 #punc:)
 #punc:{
-10:        if (b[0] > 1){
-#id:a
+31:    if (c[0] > 1){ 
+#id:b
 #op:=
-#id:a
+#id:b
 #op:*
-#sci:1.23e-1
+#sci:99.0e-10
 #punc:;
-11:                a = a * 1.23e-1;
+32:            b = b * 99.0e-10; 
 #punc:}
-12:        }
+33:        }
+34:
 #key:return
 #integer:0
 #punc:;
-13:        return 0;
-14:
+35:    return 0;
 #punc:}
-15:}
+36:}
