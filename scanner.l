@@ -5,7 +5,7 @@
 #include <string.h>
 int lineCount = 1;
 int lineIndex = 0;
-char lineBuffer[10000];
+char lineBuffer[50000];
 int srcOn = 1;
 int tokenOn = 1;
 typedef enum {
@@ -19,7 +19,6 @@ void PrintSrc();
 void PrintToken(type t,char* text);
 void PrintEOFSrc();
 void Error();
-
 
 %}
 
@@ -35,6 +34,9 @@ CMT 	"/*".*"*/"
 LCMT	"//"[^\n]*\n
 CH 		(\\\')|(\\\")|(\\\?)|(\\\\)|(\\t)|(\\n)|[^\'\\\n]
 STRCH	(\\\')|(\\\")|(\\\?)|(\\\\)|(\\t)|(\\n)|[^\"\\\n]
+
+
+SEP		((\ )| (\t) | (\n) | ("+") | ("-") | ("*") | ("/") | ("%") | ("++") | ("--") | ("<") |(">")|("<=")|(">=")|("==")|("=")|("!=")|("!")|("&&")|("||")|("&")|(":")|(";")|(",")|("[")|("]")|("(")|(")")|("{")|("}"))
 
 FSUFIX	[fFlL]
 ISUFIX	[uUlL]|(ll)|(LL)
@@ -54,14 +56,14 @@ ISUFIX	[uUlL]|(ll)|(LL)
 \/\/	{BEGIN LINECOMMENT;PutToBuffer(yytext);}
 \/\*	{BEGIN COMMENT; PutToBuffer(yytext);}
 
-#{BLANK}*pragma{BLANK}+source{BLANK}+on{BLANK}*("//".*)?	{srcOn = 1;PutToBuffer(yytext);}
-#{BLANK}*pragma{BLANK}+source{BLANK}+on{BLANK}*("/*".*)?	{srcOn = 1;PutToBuffer(yytext);BEGIN COMMENT;}
-#{BLANK}*pragma{BLANK}+source{BLANK}+off{BLANK}*("//".*)? 		{srcOn = 0;PutToBuffer(yytext);}
-#{BLANK}*pragma{BLANK}+source{BLANK}+off{BLANK}*("/*".*)? 		{srcOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
-#{BLANK}*pragma{BLANK}+token{BLANK}+on{BLANK}*("//".*)?				{tokenOn = 1;PutToBuffer(yytext);}
-#{BLANK}*pragma{BLANK}+token{BLANK}+on{BLANK}*("/*".*)?				{tokenOn = 1;PutToBuffer(yytext);BEGIN COMMENT;}
-#{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("//".*)?				{tokenOn = 0;PutToBuffer(yytext);}
-#{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("/*".*)?				{tokenOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+on{BLANK}*("//".*)?	{srcOn = 1;PutToBuffer(yytext);}
+^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+on{BLANK}*("/*".*)?	{srcOn = 1;PutToBuffer(yytext);BEGIN COMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+off{BLANK}*("//".*)? 		{srcOn = 0;PutToBuffer(yytext);}
+^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+off{BLANK}*("/*".*)? 		{srcOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+on{BLANK}*("//".*)?				{tokenOn = 1;PutToBuffer(yytext);}
+^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+on{BLANK}*("/*".*)?				{tokenOn = 1;PutToBuffer(yytext);BEGIN COMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("//".*)?				{tokenOn = 0;PutToBuffer(yytext);}
+^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("/*".*)?				{tokenOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
 #.*			{printf("No Matched pragma rule\n");Error();}
 
 
@@ -147,14 +149,16 @@ ISUFIX	[uUlL]|(ll)|(LL)
 
 
 
-{digit}+({alpha}|_)+		{Error();}
-({alpha}|_){VID}*		{PutToBuffer(yytext);PrintToken(ID,yytext);}
 
 
 
-0{digit}+{ISUFIX}?				{Error();}
+0{ISUFIX}?{digit}+				{Error();}
 [1-9]{digit}*{ISUFIX}?		{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
 0{ISUFIX}?					{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
+
+
+{digit}+({alpha}|_)+		{Error();}
+({alpha}|_){VID}*		{PutToBuffer(yytext);PrintToken(ID,yytext);}
 
 
 {digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?	{PutToBuffer(yytext);PrintToken(SCI,yytext);}
@@ -164,15 +168,15 @@ ISUFIX	[uUlL]|(ll)|(LL)
 {digit}+[eE][+-]?{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(SCI,yytext);}
 {digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
 
-{digit}+\.{digit}*{FSUFIX}?	{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
+{digit}+\.{digit}*{FSUFIX}?		{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
 {digit}+\.{digit}*{FSUFIX}?(\.|_|{ad})+		{printf("double Error\n");Error();}
 \.{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
 \.{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("double Error\n");Error();}
 
 
 
-\'{CH}+\'           {PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
-L?\"{STRCH}*\"			{
+\'{CH}\'           {	PutToBuffer(yytext);PrintToken(CHARACTER,yytext);}
+L?\"{STRCH}*\"		{
 						PutToBuffer(yytext);
 						char* temp;
 						if(yytext[0]=='L'){
@@ -223,10 +227,11 @@ L?\"{STRCH}*\"			{
 
 \n		{PutToBuffer(yytext); PrintSrc();ClearBuffer();lineCount++;}
 		
+
 (" ")|(\t)	{PutToBuffer(yytext);}
 \0		{PrintEOFSrc();}
 
-.		{printf("non-exsistent token\n");Error();}
+.		{Error();}
 
 %%
 
