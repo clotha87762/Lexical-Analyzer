@@ -7,7 +7,7 @@
  * for loop
  * Comment
  */
-#include <stdio.h>
+
 
 // main function
 int main(void)

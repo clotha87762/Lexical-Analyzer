@@ -5,7 +5,7 @@
 #include <string.h>
 int lineCount = 1;
 int lineIndex = 0;
-char lineBuffer[10000];
+char lineBuffer[50000];
 int srcOn = 1;
 int tokenOn = 1;
 typedef enum {
@@ -64,7 +64,7 @@ ISUFIX	[uUlL]|(ll)|(LL)
 ^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+on{BLANK}*("/*")?				{tokenOn = 1;PutToBuffer(yytext);BEGIN COMMENT;}
 ^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("//")?				{tokenOn = 0;PutToBuffer(yytext);BEGIN LINECOMMENT;}
 ^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("/*")?				{tokenOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
-^{BLANK}*#.*			{printf("No Matched pragma rule\n");Error();}
+^{BLANK}*#(_|{ad}|{BLANK})*		{Error();}
 
 
 
@@ -152,27 +152,26 @@ ISUFIX	[uUlL]|(ll)|(LL)
 
 
 
-0{digit}+{ISUFIX}?				{Error();}
+0{digit}+{ISUFIX}?				{/*printf("invalid integer!\n");*/Error();}
 [1-9]{digit}*{ISUFIX}?		{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
 0{ISUFIX}?					{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
 
 
-{digit}+({alpha}|_)({VID})*		{Error();}
+{digit}+({alpha}|_)+		{Error();}
 ({alpha}|_){VID}*		{PutToBuffer(yytext);PrintToken(ID,yytext);}
 
 
 {digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?	{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-{digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+	{printf("SCI Error\n");Error();}
+{digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+	{/*printf("SCI Error\n");*/Error();}
 \.{digit}+[eE][+-]?{digit}+{FSUFIX}?		{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-\.{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
+\.{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{/*printf("SCI Error\n");*/Error();}
 {digit}+[eE][+-]?{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
-
+{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{/*printf("SCI Error\n");*/Error();}
 
 {digit}+\.{digit}*{FSUFIX}?		{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
-{digit}+\.{digit}*{FSUFIX}?(\.|_|{ad})+		{printf("double Error\n");Error();}
+{digit}+\.{digit}*{FSUFIX}?(\.|_|{ad})+		{/*printf("double Error\n");*/Error();}
 \.{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
-\.{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("double Error\n");Error();}
+\.{digit}+{FSUFIX}?(\.|_|{ad})+		{/*printf("double Error\n");*/Error();}
 
 
 
@@ -194,8 +193,7 @@ L?\"{STRCH}*\"		{
 						}
 						PrintToken(STRING,temp);
 					}  
-L?\"{STRCH}*		{Error();}
-
+L?\"/{STRCH}*		{/*printf("only one double-quote!\n");*/Error();}
 
 "+"		{PutToBuffer(yytext);PrintToken(OP,yytext);}
 "-"		{PutToBuffer(yytext);PrintToken(OP,yytext);}
@@ -250,7 +248,7 @@ void PutToBuffer(char* token){
 }
 
 void ClearBuffer(){
-	memset(lineBuffer,0,10000);
+	memset(lineBuffer,0,50000);
 }
 
 void PrintToken(type t,char* text){
