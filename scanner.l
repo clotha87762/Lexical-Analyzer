@@ -56,15 +56,15 @@ ISUFIX	[uUlL]|(ll)|(LL)
 \/\/	{BEGIN LINECOMMENT;PutToBuffer(yytext);}
 \/\*	{BEGIN COMMENT; PutToBuffer(yytext);}
 
-^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+on{BLANK}*("//".*)?	{srcOn = 1;PutToBuffer(yytext);}
-^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+on{BLANK}*("/*".*)?	{srcOn = 1;PutToBuffer(yytext);BEGIN COMMENT;}
-^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+off{BLANK}*("//".*)? 		{srcOn = 0;PutToBuffer(yytext);}
-^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+off{BLANK}*("/*".*)? 		{srcOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
-^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+on{BLANK}*("//".*)?				{tokenOn = 1;PutToBuffer(yytext);}
-^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+on{BLANK}*("/*".*)?				{tokenOn = 1;PutToBuffer(yytext);BEGIN COMMENT;}
-^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("//".*)?				{tokenOn = 0;PutToBuffer(yytext);}
-^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("/*".*)?				{tokenOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
-#.*			{printf("No Matched pragma rule\n");Error();}
+^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+on{BLANK}*("//")?	{srcOn = 1;PutToBuffer(yytext);BEGIN LINECOMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+on{BLANK}*("/*")?	{srcOn = 1;PutToBuffer(yytext);BEGIN COMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+off{BLANK}*("//")? 		{srcOn = 0;PutToBuffer(yytext);BEGIN LINECOMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+source{BLANK}+off{BLANK}*("/*")? 		{srcOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+on{BLANK}*("//")?				{tokenOn = 1;PutToBuffer(yytext);BEGIN LINECOMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+on{BLANK}*("/*")?				{tokenOn = 1;PutToBuffer(yytext);BEGIN COMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("//")?				{tokenOn = 0;PutToBuffer(yytext);BEGIN LINECOMMENT;}
+^{BLANK}*#{BLANK}*pragma{BLANK}+token{BLANK}+off{BLANK}*("/*")?				{tokenOn = 0;PutToBuffer(yytext);BEGIN COMMENT;}
+^{BLANK}*#(_|{ad}|{BLANK})*		{Error();}
 
 
 
@@ -152,7 +152,7 @@ ISUFIX	[uUlL]|(ll)|(LL)
 
 
 
-0{ISUFIX}?{digit}+				{Error();}
+0{digit}+{ISUFIX}?				{/*printf("invalid integer!\n");*/Error();}
 [1-9]{digit}*{ISUFIX}?		{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
 0{ISUFIX}?					{PutToBuffer(yytext);PrintToken(INTEGER,yytext);}
 
@@ -162,16 +162,16 @@ ISUFIX	[uUlL]|(ll)|(LL)
 
 
 {digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?	{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-{digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+	{printf("SCI Error\n");Error();}
+{digit}+\.{digit}*[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+	{/*printf("SCI Error\n");*/Error();}
 \.{digit}+[eE][+-]?{digit}+{FSUFIX}?		{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-\.{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
+\.{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{/*printf("SCI Error\n");*/Error();}
 {digit}+[eE][+-]?{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(SCI,yytext);}
-{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("SCI Error\n");Error();}
+{digit}+[eE][+-]?{digit}+{FSUFIX}?(\.|_|{ad})+		{/*printf("SCI Error\n");*/Error();}
 
 {digit}+\.{digit}*{FSUFIX}?		{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
-{digit}+\.{digit}*{FSUFIX}?(\.|_|{ad})+		{printf("double Error\n");Error();}
+{digit}+\.{digit}*{FSUFIX}?(\.|_|{ad})+		{/*printf("double Error\n");*/Error();}
 \.{digit}+{FSUFIX}?			{PutToBuffer(yytext);PrintToken(DOUBLE,yytext);}
-\.{digit}+{FSUFIX}?(\.|_|{ad})+		{printf("double Error\n");Error();}
+\.{digit}+{FSUFIX}?(\.|_|{ad})+		{/*printf("double Error\n");*/Error();}
 
 
 
@@ -193,7 +193,7 @@ L?\"{STRCH}*\"		{
 						}
 						PrintToken(STRING,temp);
 					}  
-
+L?\"/{STRCH}*		{/*printf("only one double-quote!\n");*/Error();}
 
 "+"		{PutToBuffer(yytext);PrintToken(OP,yytext);}
 "-"		{PutToBuffer(yytext);PrintToken(OP,yytext);}
@@ -248,7 +248,7 @@ void PutToBuffer(char* token){
 }
 
 void ClearBuffer(){
-	memset(lineBuffer,0,10000);
+	memset(lineBuffer,0,50000);
 }
 
 void PrintToken(type t,char* text){
