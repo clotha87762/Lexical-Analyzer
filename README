@@ -1,0 +1,11 @@
+How TA check your HW?
+
+For test cases without errors,
+$ ./your_scnner < test.cs > your_output.out
+$ diff your_output.out the_correct_output_from_TA.out
+
+For test cases with errors,
+$ ./your_scnner < test_error 2> your_output.out
+See if your_output.out shows the correct error message.
+
+Feel free to ask questions. :)

@@ -1,0 +1,4 @@
+// pattern name: string_error
+
+// embedded newline error
+char a[] = "
